@@ -34,14 +34,13 @@ data_analysis <- data %>%
   group_by(vertical_transect, quadrat, species)%>%
   mutate(n_per_quadrat = sum(n)*10) %>%
   mutate(site = ifelse(vertical_transect %in% c(1,2,3), "sheltered", "exposed")) %>% 
-  arrange(vertical_transect, quadrat) %>%
   select(-c(n,square)) %>% 
   na.omit %>%
   distinct() %>%
   group_by(vertical_transect, quadrat) %>%
-  mutate(quadrat_prop = n_per_quadrat / sum(n_per_quadrat)) %>% 
-  mutate(prop_log = log(quadrat_prop)) %>% 
-  mutate(prop_times_logprop = -(quadrat_prop * prop_log))
+  mutate(pi_quadrat = n_per_quadrat / sum(n_per_quadrat)) %>% 
+  mutate(pi_log = log(pi_quadrat)) %>% 
+  mutate(pi_times_pi_log = -(pi_quadrat * pi_log))
 
 quad_richness <- data %>%
   drop_na(n) %>%
@@ -50,7 +49,7 @@ quad_richness <- data %>%
 
 shannon_diversity <- data_analysis %>% 
   group_by(vertical_transect, quadrat) %>%
-  summarize(sum(prop_times_logprop, na.rm = FALSE))
+  summarize(sum(pi_times_pi_log, na.rm = FALSE))
 ```
 
 ## Results and Conclusion
