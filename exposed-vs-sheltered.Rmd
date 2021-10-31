@@ -65,4 +65,42 @@ richness_plot <- ggplot(data = quad_richness) +
 richness_plot
 ```
 
-## Results and Conclusion
+
+```{r}
+
+shan_eve <- shannon_evenness %>%
+  group_by(vertical_transect,quadrat) %>%
+  mutate(site = ifelse(vertical_transect %in% c(1,2,3), "sheltered", "exposed")) %>%
+  rename("eve_sum" = "sum(pi_times_pi_log, na.rm = FALSE)")
+  
+even_plot <- ggplot(data = shan_eve) +
+  geom_boxplot(aes(x = site, y = eve_sum, fill = site)) +
+  labs(x = "Site", y = "Species Evenness") +
+  theme_test()+
+  theme(legend.position = 'none')
+    
+even_plot
+  
+               
+```
+```{r}
+## Statistical Analysis
+
+shan_div <- shannon_diversity %>%
+  group_by(vertical_transect,quadrat) %>%
+  mutate(site = ifelse(vertical_transect %in% c(1,2,3), "sheltered", "exposed")) %>%
+  rename("div_sum" = "sum(pi_times_pi_log, na.rm = FALSE)") %>%
+ 
+shanD.mod <- lm(div_sum ~ site, data = shan_div)
+summary(shanD.mod)
+check.model(shanD.mod)
+  
+
+```
+
+## Results
+
+
+## Conclusion
+
+
