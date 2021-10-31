@@ -41,6 +41,8 @@ data_analysis <- data %>%
   mutate(pi_quadrat = n_per_quadrat / sum(n_per_quadrat)) %>% 
   mutate(pi_log = log(pi_quadrat)) %>% 
   mutate(pi_times_pi_log = -(pi_quadrat * pi_log))
+
+shannon_evenness <-
   
 shannon_diversity <- data_analysis %>% 
   group_by(vertical_transect, quadrat) %>%
@@ -53,16 +55,14 @@ quad_richness <- data %>%
   mutate(site = ifelse(vertical_transect %in% c(1,2,3), "sheltered", "exposed"))
 ```
 
-```{r}
+```{r, echo=FALSE}
 richness_plot <- ggplot(data = quad_richness) +
   geom_boxplot(aes(x = site, y = richness, fill = site)) +
   labs(x = "Site", y = "Species Richness")+
-  theme_grey()+
+  theme_test()+
   theme(legend.position = 'none')
     
 richness_plot
-  summarize(richness = length(unique(species)))
-
 ```
 
 ## Results and Conclusion
