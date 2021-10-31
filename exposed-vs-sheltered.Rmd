@@ -40,7 +40,8 @@ data_analysis <- data %>%
   group_by(vertical_transect, quadrat) %>%
   mutate(pi_quadrat = n_per_quadrat / sum(n_per_quadrat)) %>% 
   mutate(pi_log = log(pi_quadrat)) %>% 
-  mutate(pi_times_pi_log = -(pi_quadrat * pi_log))
+  mutate(pi_times_pi_log = -(pi_quadrat * pi_log)) %>% 
+  select(-c(pi_quadrat, pi_log))
 
 # Diversity calculation
 
@@ -62,9 +63,15 @@ quad_richness <- data %>%
 
 shannon_evenness <- quad_richness %>% 
   mutate(pi_even = 1/richness) %>% 
-  mutate(pi_even_log = log(pi_even))
-
+  mutate(pi_log_even = log(pi_even)) %>% 
+  mutate(pi_times_log_pi_even = -(pi_even * pi_log_even)) %>% 
+  mutate(pi_tot = richness * pi_times_log_pi_even) %>% 
+  select(-c(pi_even, pi_log_even)) %>% 
+  cbind(shannon_diversity$pi_times_pi_log)
+  
 ```
+
+## Results and Conclusion
 
 ```{r, echo=FALSE}
 richness_plot <- ggplot(data = quad_richness) +
@@ -76,8 +83,7 @@ richness_plot <- ggplot(data = quad_richness) +
 richness_plot
 ```
 
-## Results and Conclusion
-```{r}
+```{r echo=FALSE}
 shannon_diversity_plot <- ggplot(data = shannon_diversity) +
   geom_boxplot(aes(x = site, y = shannon_sum, fill = site)) +
   labs(x = "Site", y = "Diversity")+
