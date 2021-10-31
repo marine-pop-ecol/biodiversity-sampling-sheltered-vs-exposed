@@ -42,17 +42,26 @@ data_analysis <- data %>%
   mutate(pi_log = log(pi_quadrat)) %>% 
   mutate(pi_times_pi_log = -(pi_quadrat * pi_log))
 
-shannon_evenness <-
-  
+# Diversity calculation
+
 shannon_diversity <- data_analysis %>% 
   group_by(vertical_transect, quadrat) %>%
   summarize(sum(pi_times_pi_log, na.rm = FALSE))
+
+# Richness calculation
 
 quad_richness <- data %>%
   drop_na(n) %>%
   group_by(vertical_transect,quadrat) %>%
   summarize(richness = length(unique(species))) %>%
   mutate(site = ifelse(vertical_transect %in% c(1,2,3), "sheltered", "exposed"))
+
+# Evenness calculation
+
+shannon_evenness <- quad_richness %>% 
+  mutate(pi_even = 1/richness) %>% 
+  mutate(pi_even_log = log(pi_even))
+
 ```
 
 ```{r, echo=FALSE}
