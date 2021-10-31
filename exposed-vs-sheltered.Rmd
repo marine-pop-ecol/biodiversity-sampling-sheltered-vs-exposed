@@ -46,7 +46,9 @@ shannon_evenness <-
   
 shannon_diversity <- data_analysis %>% 
   group_by(vertical_transect, quadrat) %>%
-  summarize(sum(pi_times_pi_log, na.rm = FALSE))
+  summarize(sum(pi_times_pi_log, na.rm = FALSE)) %>%
+  rename("shannon_sum" = "sum(pi_times_pi_log, na.rm = FALSE)") %>%
+  mutate(site = ifelse(vertical_transect %in% c(1,2,3), "sheltered", "exposed"))
 
 quad_richness <- data %>%
   drop_na(n) %>%
@@ -66,3 +68,13 @@ richness_plot
 ```
 
 ## Results and Conclusion
+```{r}
+shannon_diversity_plot <- ggplot(data = shannon_diversity) +
+  geom_boxplot(aes(x = site, y = shannon_sum, fill = site)) +
+  labs(x = "Site", y = "Diversity")+
+  theme_test()+
+  theme(legend.position = 'none')
+
+shannon_diversity_plot
+```
+
