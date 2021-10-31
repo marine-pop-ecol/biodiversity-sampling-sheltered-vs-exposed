@@ -39,12 +39,18 @@ data_analysis <- data %>%
   na.omit %>%
   distinct() %>%
   group_by(vertical_transect, quadrat) %>%
-  mutate(quadrat_prop = n_per_quadrat / sum(n_per_quadrat))
+  mutate(quadrat_prop = n_per_quadrat / sum(n_per_quadrat)) %>% 
+  mutate(prop_log = log(quadrat_prop)) %>% 
+  mutate(prop_times_logprop = -(quadrat_prop * prop_log))
 
 quad_richness <- data %>%
   drop_na(n) %>%
   group_by(vertical_transect,quadrat) %>%
   summarize(richness = length(unique(species)))
+
+shannon_diversity <- data_analysis %>% 
+  group_by(vertical_transect, quadrat) %>%
+  summarize(sum(prop_times_logprop, na.rm = FALSE))
 ```
 
 ## Results and Conclusion
