@@ -44,7 +44,18 @@ data_analysis <- data %>%
 quad_richness <- data %>%
   drop_na(n) %>%
   group_by(vertical_transect,quadrat) %>%
-  summarize(richness = length(unique(species)))
+  summarize(richness = length(unique(species))) %>%
+  mutate(site = ifelse(vertical_transect %in% c(1,2,3), "sheltered", "exposed"))
+```
+
+```{r}
+richness_plot <- ggplot(data = quad_richness) +
+  geom_boxplot(aes(x = site, y = richness, fill = site)) +
+  labs(x = "Site", y = "Species Richness")+
+  theme_grey()+
+  theme(legend.position = 'none')
+    
+richness_plot
 ```
 
 ## Results and Conclusion
