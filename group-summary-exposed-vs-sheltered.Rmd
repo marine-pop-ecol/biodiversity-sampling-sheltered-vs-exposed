@@ -14,7 +14,7 @@ We hypothesize that there will be greater biodiversity found in the sheltered si
 
 ## Data Collection
 
-We collected data from both wave-shelteredand an wave-exposed sites, at Scott's Bay, Bamfield. We used 10 by 10 quadrats and selected 10 random squares, in which we counted species richness and abundance. 
+We collected data from both wave-sheltered and an wave-exposed sites, at Scott's Bay, Bamfield. We counted species richness and abundance within ten haphazardly selected 10 cm by 10 cm quadrats along two parallel transect lines per site. 
 
 ## Analysis
 
@@ -72,19 +72,21 @@ shannon_evenness <- shannon_diversity %>%
 
 ## Results and Conclusions
 
-```{r, fig.align = 'left', out.width = "80%", out.height = "80%", fig.cap = "Hello.", fig.cap.align = 'left', echo=FALSE, warning=FALSE, message=FALSE}
+```{r, fig.align = 'left', out.width = "80%", out.height = "80%", fig.cap = "Species richness present at the exposed and sheltered sites at Scott's Bay, Bamfield, Canada. Determined using 10 quadrats haphazardly sampled along two parallel transect lines per site", fig.cap.align = 'left', echo=FALSE, warning=FALSE, message=FALSE}
 richness_plot <- ggplot(data = quad_richness) +
   geom_boxplot(aes(x = site, y = richness, fill = site)) +
   labs(x = "Site", y = "Species Richness")+
   theme_test()+
-  theme(legend.position = 'none')+
+  theme(legend.position = 'none') +
   scale_fill_manual(values = c('#A8327DFF', '#FA7F5EFF'))
+
 
 richness_plot # COLE: how to export?
 ggsave(here("./images/richness_plot.png"), richness_plot)
+
 ```
 
-```{r, fig.align = 'left', out.width = "80%", out.height = "80%", fig.cap = "Hello.", fig.cap.align = 'left', echo=FALSE, warning=FALSE, message=FALSE}
+```{r, fig.align = 'left', out.width = "80%", out.height = "80%", fig.cap = "fig.cap = "H' value of Shannon-Wiener Diversity Index present at the exposed and sheltered sites at Scott's Bay, Bamfield, Canada. Determined using 10 quadrats haphazardly sampled along two parallel transect lines per site.", fig.cap.align = 'left', echo=FALSE, warning=FALSE, message=FALSE}
 shannon_diversity_plot <- ggplot(data = shannon_diversity) +
   geom_boxplot(aes(x = site, y = shannon_div, fill = site)) +
   labs(x = "Site", y = "Diversity Index")+
@@ -96,13 +98,15 @@ shannon_diversity_plot
 ggsave(here("./images/diversity_plot.png"), shannon_diversity_plot)
 ```
 
+\newpage 
+
 ```{r, echo=FALSE, results=FALSE}
 ## Statistical Analysis
 anova_test_div <- aov(shannon_div ~ site, data = shannon_diversity)
 summary(anova_test_div)
 ```
 
-```{r, fig.align = 'left', out.width = "80%", out.height = "80%", fig.cap = "Hello.", fig.cap.align = 'left', echo=FALSE, warning=FALSE, message=FALSE}
+```{r, fig.align = 'left', out.width = "80%", out.height = "80%", fig.cap = "Diversity evenness values of the exposed and sheltered sites at Scott's Bay, Bamfield, Canada. Determined using 10 quadrats haphazardly sampled along two parallel transect lines per site.", fig.cap.align = 'left', echo=FALSE, warning=FALSE, message=FALSE}
 shannon_evenness_plot <- ggplot(data = shannon_evenness) +
   geom_boxplot(aes(x = site, y = evenness, fill = site)) +
   labs(x = "Site", y = "Eveness Index")+
