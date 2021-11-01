@@ -1,7 +1,7 @@
 ---
 title: 'Biodiversity Sampling: Exposed vs Sheltered'
 author: "Andrew Bickell, Gabrielle Languedoc, Joan Moreaux and Mara Bohm"
-date: "30/10/2021"
+date: "01/11/2021"
 output:
   pdf_document:
     includes:
@@ -66,14 +66,13 @@ quad_richness <- data %>%
 
 shannon_evenness <- shannon_diversity %>% 
   cbind(richness = quad_richness$richness) %>% 
-  mutate(H_max = log(richness)) %>% #COLE: google says in r, log is ln??? can I use log then?
+  mutate(H_max = log(richness)) %>%
   mutate(evenness = shannon_div/H_max)
-
 ```
 
-## Results and Conclusion
+## Results and Conclusions
 
-```{r, echo=FALSE}
+```{r, fig.align = 'left', out.width = "80%", out.height = "80%", fig.cap = "Hello.", fig.cap.align = 'left', echo=FALSE, warning=FALSE, message=FALSE}
 richness_plot <- ggplot(data = quad_richness) +
   geom_boxplot(aes(x = site, y = richness, fill = site)) +
   labs(x = "Site", y = "Species Richness")+
@@ -85,7 +84,7 @@ richness_plot # COLE: how to export?
 ggsave(here("./images/richness_plot.png"), richness_plot)
 ```
 
-```{r, echo=FALSE}
+```{r, fig.align = 'left', out.width = "80%", out.height = "80%", fig.cap = "Hello.", fig.cap.align = 'left', echo=FALSE, warning=FALSE, message=FALSE}
 shannon_diversity_plot <- ggplot(data = shannon_diversity) +
   geom_boxplot(aes(x = site, y = shannon_div, fill = site)) +
   labs(x = "Site", y = "Diversity Index")+
@@ -94,9 +93,10 @@ shannon_diversity_plot <- ggplot(data = shannon_diversity) +
   scale_fill_manual(values = c('#A8327DFF', '#FA7F5EFF'))
 
 shannon_diversity_plot
+ggsave(here("./images/diversity_plot.png"), shannon_diversity_plot)
 ```
 
-```{r}
+```{r, fig.align = 'left', out.width = "80%", out.height = "80%", fig.cap = "Hello.", fig.cap.align = 'left', echo=FALSE, warning=FALSE, message=FALSE}
 shannon_evenness_plot <- ggplot(data = shannon_evenness) +
   geom_boxplot(aes(x = site, y = evenness, fill = site)) +
   labs(x = "Site", y = "Eveness Index")+
@@ -105,25 +105,12 @@ shannon_evenness_plot <- ggplot(data = shannon_evenness) +
   scale_fill_manual(values = c('#A8327DFF', '#FA7F5EFF'))
 
 shannon_evenness_plot
+ggsave(here("./images/evenness_plot.png"), shannon_evenness_plot)
 ```
 
-```{r}
+```{r, echo=FALSE, results=FALSE}
 ## Statistical Analysis
-
-shan_div <- shannon_diversity %>%
-  group_by(vertical_transect,quadrat) %>%
-  mutate(site = ifelse(vertical_transect %in% c(1,2,3), "sheltered", "exposed")) %>%
-  rename("div_sum" = "sum(pi_times_pi_log, na.rm = FALSE)") %>%
- 
-shanD.mod <- lm(div_sum ~ site, data = shan_div)
-summary(shanD.mod)
-check.model(shanD.mod)
-  
-
+anova_test <- aov(shannon_div ~ site, data = shannon_diversity)
+summary(anova_test)
 ```
-
-## Results
-
-
-## Conclusion
 
