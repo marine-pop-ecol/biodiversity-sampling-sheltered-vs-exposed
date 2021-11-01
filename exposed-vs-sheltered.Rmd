@@ -65,7 +65,7 @@ quad_richness <- data %>%
 
 shannon_evenness <- shannon_diversity %>% 
   cbind(richness = quad_richness$richness) %>% 
-  mutate(H_max = log(richness)) %>% #google says in r, log is ln 
+  mutate(H_max = log(richness)) %>% #COLE: google says in r, log is ln??? can I use log then?
   mutate(evenness = shannon_div/H_max)
 
 ```
@@ -80,7 +80,7 @@ richness_plot <- ggplot(data = quad_richness) +
   theme(legend.position = 'none')+
   scale_fill_manual(values = c('#A8327DFF', '#FA7F5EFF'))
 
-richness_plot
+richness_plot # COLE: how to export?
 ```
 
 ```{r, echo=FALSE}
