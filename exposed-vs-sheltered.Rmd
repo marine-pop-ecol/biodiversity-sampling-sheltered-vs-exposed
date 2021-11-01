@@ -83,14 +83,25 @@ richness_plot <- ggplot(data = quad_richness) +
 richness_plot
 ```
 
-```{r echo=FALSE}
+```{r, echo=FALSE}
 shannon_diversity_plot <- ggplot(data = shannon_diversity) +
   geom_boxplot(aes(x = site, y = shannon_div, fill = site)) +
-  labs(x = "Site", y = "Diversity")+
+  labs(x = "Site", y = "Diversity Index")+
   theme_test()+
   theme(legend.position = 'none')+
   scale_fill_manual(values = c('#A8327DFF', '#FA7F5EFF'))
 
 shannon_diversity_plot
+```
+
+```{r}
+shannon_evenness_plot <- ggplot(data = shannon_evenness) +
+  geom_boxplot(aes(x = site, y = evenness, fill = site)) +
+  labs(x = "Site", y = "Eveness Index")+
+  theme_test()+
+  theme(legend.position = 'none')+
+  scale_fill_manual(values = c('#A8327DFF', '#FA7F5EFF'))
+
+shannon_evenness_plot
 ```
 
