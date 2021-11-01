@@ -1,0 +1,111 @@
+---
+title: 'Biodiversity Sampling: Exposed vs Sheltered'
+author: "Andrew Bickell, Gabrielle Languedoc, Joan Moreaux and Mara Bohm"
+date: "30/10/2021"
+output:
+  pdf_document:
+    includes:
+      in_header: file.tex
+---
+
+## Hypothesis
+
+We hypothesize that there will be greater biodiversity found in the sheltered site because it experiences less hydrodynamic stress.
+
+## Data Collection
+
+We collected data from both wave-shelteredand an wave-exposed sites, at Scott's Bay, Bamfield. We used 10 by 10 quadrats and selected 10 random squares, in which we counted species richness and abundance. 
+
+## Analysis
+
+```{r, echo=FALSE, message=FALSE}
+library(vegan)
+library(here)
+library(scales)
+library(viridis)
+library(tidyverse)
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+data <- read.csv("data-entry-final.csv")
+
+# Manipulating the data
+
+data_analysis <- data %>% 
+  select(-c(abiotic_hab, biotic_hab)) %>% 
+  mutate(quadrat = as.factor(quadrat)) %>% 
+  group_by(vertical_transect, quadrat, species)%>%
+  mutate(n_per_quadrat = sum(n)*10) %>%
+  mutate(site = ifelse(vertical_transect %in% c(1,2,3), "sheltered", "exposed")) %>% 
+  select(-c(n,square)) %>% 
+  na.omit %>%
+  distinct() %>%
+  group_by(vertical_transect, quadrat) %>%
+  mutate(pi_quadrat = n_per_quadrat / sum(n_per_quadrat)) %>% 
+  mutate(pi_log = log(pi_quadrat)) %>% 
+  mutate(pi_times_pi_log = -(pi_quadrat * pi_log)) %>% 
+  select(-c(pi_quadrat, pi_log))
+
+# Diversity calculation
+
+shannon_diversity <- data_analysis %>% 
+  group_by(vertical_transect, quadrat) %>%
+  summarize(sum(pi_times_pi_log, na.rm = FALSE)) %>%
+  rename("shannon_div" = "sum(pi_times_pi_log, na.rm = FALSE)") %>%
+  mutate(site = ifelse(vertical_transect %in% c(1,2,3), "sheltered", "exposed"))
+
+# Richness calculation
+
+quad_richness <- data %>%
+  drop_na(n) %>%
+  group_by(vertical_transect,quadrat) %>%
+  summarize(richness = length(unique(species))) %>%
+  mutate(site = ifelse(vertical_transect %in% c(1,2,3), "sheltered", "exposed"))
+
+# Evenness calculation
+
+shannon_evenness <- shannon_diversity %>% 
+  cbind(richness = quad_richness$richness) %>% 
+  mutate(H_max = log(richness)) %>% #COLE: google says in r, log is ln??? can I use log then?
+  mutate(evenness = shannon_div/H_max)
+
+```
+
+## Results and Conclusion
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+richness_plot <- ggplot(data = quad_richness) +
+  geom_boxplot(aes(x = site, y = richness, fill = site)) +
+  labs(x = "Site", y = "Species Richness")+
+  theme_test()+
+  theme(legend.position = 'none')+
+  scale_fill_manual(values = c('#A8327DFF', '#FA7F5EFF'))
+
+richness_plot
+ggsave(here("./images/richness_plot.png"), richness_plot)
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+shannon_diversity_plot <- ggplot(data = shannon_diversity) +
+  geom_boxplot(aes(x = site, y = shannon_div, fill = site)) +
+  labs(x = "Site", y = "Diversity Index")+
+  theme_test()+
+  theme(legend.position = 'none')+
+  scale_fill_manual(values = c('#A8327DFF', '#FA7F5EFF'))
+
+shannon_diversity_plot
+ggsave(here("./images/diversity_plot.png"), shannon_diversity_plot)
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+shannon_evenness_plot <- ggplot(data = shannon_evenness) +
+  geom_boxplot(aes(x = site, y = evenness, fill = site)) +
+  labs(x = "Site", y = "Eveness Index")+
+  theme_test()+
+  theme(legend.position = 'none')+
+  scale_fill_manual(values = c('#A8327DFF', '#FA7F5EFF'))
+
+shannon_evenness_plot
+ggsave(here("./images/evenness_plot.png"), shannon_evenness_plot)
+```
+
