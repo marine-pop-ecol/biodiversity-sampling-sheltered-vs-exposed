@@ -14,11 +14,7 @@ We hypothesize that there will be greater biodiversity found in the sheltered si
 
 ## Data Collection
 
-<<<<<<< HEAD
 We collected data from both wave-sheltered and an wave-exposed sites, at Scott's Bay, Bamfield. We counted species richness and abundance within ten haphazardly selected 10 cm by 10 cm quadrats along two parallel transect lines per site. 
-=======
-We collected data from both wave-sheltered and an wave-exposed sites at Scott's Bay, Bamfield BC, Canada. We used 10 cm by 10 cm quadrats along each transect line. Inside each quadrat we selected 10 random squares to count species richness and abundance. 
->>>>>>> main
 
 ## Analysis
 
