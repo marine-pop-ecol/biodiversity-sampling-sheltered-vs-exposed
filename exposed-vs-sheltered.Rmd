@@ -20,6 +20,7 @@ We collected data from both wave-shelteredand an wave-exposed sites, at Scott's 
 
 ```{r, echo=FALSE, message=FALSE}
 library(vegan)
+library(here)
 library(scales)
 library(viridis)
 library(tidyverse)
@@ -81,6 +82,7 @@ richness_plot <- ggplot(data = quad_richness) +
   scale_fill_manual(values = c('#A8327DFF', '#FA7F5EFF'))
 
 richness_plot # COLE: how to export?
+ggsave(here("./images/richness_plot.png"), richness_plot)
 ```
 
 ```{r, echo=FALSE}
