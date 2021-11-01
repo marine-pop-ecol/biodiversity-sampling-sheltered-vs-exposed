@@ -20,6 +20,8 @@ We collected data from both wave-shelteredand an wave-exposed sites, at Scott's 
 
 ```{r, echo=FALSE, message=FALSE}
 library(vegan)
+library(scales)
+library(viridis)
 library(tidyverse)
 ```
 
@@ -48,7 +50,7 @@ data_analysis <- data %>%
 shannon_diversity <- data_analysis %>% 
   group_by(vertical_transect, quadrat) %>%
   summarize(sum(pi_times_pi_log, na.rm = FALSE)) %>%
-  rename("shannon_sum" = "sum(pi_times_pi_log, na.rm = FALSE)") %>%
+  rename("shannon_div" = "sum(pi_times_pi_log, na.rm = FALSE)") %>%
   mutate(site = ifelse(vertical_transect %in% c(1,2,3), "sheltered", "exposed"))
 
 # Richness calculation
@@ -61,14 +63,11 @@ quad_richness <- data %>%
 
 # Evenness calculation
 
-shannon_evenness <- quad_richness %>% 
-  mutate(pi_even = 1/richness) %>% 
-  mutate(pi_log_even = log(pi_even)) %>% 
-  mutate(pi_times_log_pi_even = -(pi_even * pi_log_even)) %>% 
-  mutate(pi_tot = richness * pi_times_log_pi_even) %>% 
-  select(-c(pi_even, pi_log_even)) %>% 
-  cbind(shannon_diversity$pi_times_pi_log)
-  
+shannon_evenness <- shannon_diversity %>% 
+  cbind(richness = quad_richness$richness) %>% 
+  mutate(H_max = log(richness)) %>% #google says in r, log is ln 
+  mutate(evenness = shannon_div/H_max)
+
 ```
 
 ## Results and Conclusion
@@ -78,17 +77,19 @@ richness_plot <- ggplot(data = quad_richness) +
   geom_boxplot(aes(x = site, y = richness, fill = site)) +
   labs(x = "Site", y = "Species Richness")+
   theme_test()+
-  theme(legend.position = 'none')
-    
+  theme(legend.position = 'none')+
+  scale_fill_manual(values = c('#A8327DFF', '#FA7F5EFF'))
+
 richness_plot
 ```
 
 ```{r echo=FALSE}
 shannon_diversity_plot <- ggplot(data = shannon_diversity) +
-  geom_boxplot(aes(x = site, y = shannon_sum, fill = site)) +
+  geom_boxplot(aes(x = site, y = shannon_div, fill = site)) +
   labs(x = "Site", y = "Diversity")+
   theme_test()+
-  theme(legend.position = 'none')
+  theme(legend.position = 'none')+
+  scale_fill_manual(values = c('#A8327DFF', '#FA7F5EFF'))
 
 shannon_diversity_plot
 ```
