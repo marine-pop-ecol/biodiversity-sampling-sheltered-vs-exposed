@@ -96,6 +96,12 @@ shannon_diversity_plot
 ggsave(here("./images/diversity_plot.png"), shannon_diversity_plot)
 ```
 
+```{r, echo=FALSE, results=FALSE}
+## Statistical Analysis
+anova_test_div <- aov(shannon_div ~ site, data = shannon_diversity)
+summary(anova_test_div)
+```
+
 ```{r, fig.align = 'left', out.width = "80%", out.height = "80%", fig.cap = "Hello.", fig.cap.align = 'left', echo=FALSE, warning=FALSE, message=FALSE}
 shannon_evenness_plot <- ggplot(data = shannon_evenness) +
   geom_boxplot(aes(x = site, y = evenness, fill = site)) +
@@ -110,7 +116,7 @@ ggsave(here("./images/evenness_plot.png"), shannon_evenness_plot)
 
 ```{r, echo=FALSE, results=FALSE}
 ## Statistical Analysis
-anova_test <- aov(shannon_div ~ site, data = shannon_diversity)
-summary(anova_test)
+anova_test_even <- aov(evenness ~ site, data = shannon_evenness)
+summary(anova_test_even)
 ```
 
