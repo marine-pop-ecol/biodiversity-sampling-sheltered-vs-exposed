@@ -14,9 +14,12 @@ We hypothesize that there will be greater biodiversity found in the sheltered si
 
 ## Data Collection
 
-We collected data from both wave-shelteredand an wave-exposed sites, at Scott's Bay, Bamfield. We used 10 by 10 quadrats and selected 10 random squares, in which we counted species richness and abundance. 
+We collected data from both wave-sheltered and an wave-exposed sites at Scott's Bay, Bamfield BC, Canada. We used 10 cm by 10 cm quadrats along each transect line. Inside each quadrat we selected 10 random squares to count species richness and abundance. 
 
 ## Analysis
+
+We compared Shannon-Weiner diveristy indexs (H'), species richness and, species evenness between the exposed and sheltered sites. We ran the statistical analysis ANOVA to determine the significance of our results. 
+
 
 ```{r, echo=FALSE, message=FALSE}
 library(vegan)
@@ -72,6 +75,8 @@ shannon_evenness <- shannon_diversity %>%
 
 ## Results and Conclusions
 
+Our analysis found that there was no significant difference between the Shannon-Weiner indexes of the exposed and sheltered sites. The p-value for this anova test was 0.218. Similarly, the p value of the richness and evenness anova analysis were 0.43 and 0.78 respectively. In all cases, we cannot reject the null hypothesis that there is no relationship between site location and diversity, richness and evenness (Table 1). 
+
 ```{r, fig.align = 'left', out.width = "80%", out.height = "80%", fig.cap = "Hello.", fig.cap.align = 'left', echo=FALSE, warning=FALSE, message=FALSE}
 richness_plot <- ggplot(data = quad_richness) +
   geom_boxplot(aes(x = site, y = richness, fill = site)) +
@@ -82,6 +87,11 @@ richness_plot <- ggplot(data = quad_richness) +
 
 richness_plot # COLE: how to export?
 ggsave(here("./images/richness_plot.png"), richness_plot)
+```
+```{r, echo=FALSE, results=FALSE}
+## Statistical Analysis
+anova_test_rich <- aov(richness~ site, data = quad_richness)
+summary(anova_test_rich)
 ```
 
 ```{r, fig.align = 'left', out.width = "80%", out.height = "80%", fig.cap = "Hello.", fig.cap.align = 'left', echo=FALSE, warning=FALSE, message=FALSE}
@@ -120,3 +130,9 @@ anova_test_even <- aov(evenness ~ site, data = shannon_evenness)
 summary(anova_test_even)
 ```
 
+Table 1. 
+| Index | P Value |
+| ------- | --------- |
+| Shannon-Weiner Diversity (H') | 0.218 |
+| Species Richness | 0.43 |
+| Species Evenness | 0.78 |
