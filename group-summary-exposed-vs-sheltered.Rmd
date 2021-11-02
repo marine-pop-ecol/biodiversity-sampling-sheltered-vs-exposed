@@ -15,11 +15,11 @@ We hypothesize that there will be greater biodiversity found in the sheltered si
 
 ## Data Collection
 
-We collected data from both wave-sheltered and an wave-exposed sites, at Scott's Bay, Bamfield. We counted species richness and abundance within ten haphazardly selected 10 cm by 10 cm quadrats along two parallel transect lines per site. 
+We collected data from a wave-sheltered and a wave-exposed site at Scott's Bay, Bamfield. Within each site, we counted species richness and abundance using ten haphazardly selected 10 cm by 10 cm quadrats along two parallel transect lines. 
 
 ## Analysis
 
-We compared Shannon-Weiner diveristy indexs (H'), species richness and, species evenness between the exposed and sheltered sites. We ran the statistical analysis ANOVA to determine the significance of our results. 
+We compared the Shannon-Wiener diversity index values (H'), species richness, and species evenness between the exposed and sheltered sites. We ran an ANOVA statistical analysis to determine the significance of our results. 
 
 
 ```{r, echo=FALSE, message=FALSE}
@@ -76,7 +76,7 @@ shannon_evenness <- shannon_diversity %>%
 
 ## Results and Conclusions  
 
-Our analysis found that there was no significant difference between the Shannon-Wiener indexes of the exposed and sheltered sites. The p-value for this Anova test was 0.218. Similarly, the p value of the richness and evenness Anova analysis were 0.43 and 0.78 respectively. In all cases, we cannot reject the null hypothesis that there is no relationship between site location and diversity, richness and evenness (Table 1). 
+Our analysis found that there was no significant difference between the Shannon-Wiener index values of diversity between the exposed and sheltered sites. The p-value for this ANOVA test was 0.218. Similarly, the p value of the richness and evenness ANOVA analysis were 0.43 and 0.78 respectively. In all cases, we do not reject the null hypothesis that there is no relationship between site location and diversity, richness and evenness (Table 1). 
 
 
 ```{r, echo = FALSE}
@@ -85,7 +85,7 @@ summary.data <- data.frame(matrix(c(0.218, 0.43, 0.78),
                                 byrow=TRUE),
                          row.names=c("Shannon-Wiener Diversity (H')","Species Richness","Species Evenness")) %>%
     rename("Value" = "matrix.c.0.218..0.43..0.78...ncol...1..byrow...TRUE.")
-knitr::kable(summary.data, table.attr = "style='width:70%", caption = "Species richness evenness and Shannon-Wiener Diversity Index values of the exposed and sheltered sites at Scott's Bay, Bamfield, Canada. Determined using 10 quadrats haphazardly sampled along two parallel transect lines per site.")
+knitr::kable(summary.data, table.attr = "style='width:70%", caption = "Resulting p-values of species richness, evenness and Shannon-Wiener Diversity Index from an ANOVA statistical test comparing the exposed and sheltered sites at Scott's Bay, Bamfield, Canada.")
 ```
 
 
